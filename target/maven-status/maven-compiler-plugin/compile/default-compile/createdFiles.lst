@@ -6,3 +6,4 @@ com\homework4\model\CashPayment.class
 com\homework4\model\QrisPayment.class
 com\homework4\model\Cart.class
 com\homework4\model\Food.class
+com\homework4\service\OrderService.class

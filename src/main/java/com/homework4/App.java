@@ -12,6 +12,7 @@ import com.homework4.model.CashPayment;
 import com.homework4.model.Food;
 import com.homework4.model.QrisPayment;
 import com.homework4.repository.FoodRepository;
+import com.homework4.service.OrderService;
 
 public class App 
 {
@@ -28,60 +29,31 @@ public class App
         // * Declare Cart
         Cart cart = new Cart();
 
+        
+        FoodRepository foodRepository = new FoodRepository();
+        
+        List<Food> foods = foodRepository.getAllFoods();
+
         while(isRunningApp){
-            // * Dependency injection
-            
-            FoodRepository foodRepository = new FoodRepository();
+        Scanner input = new Scanner(System.in);
+        
+        List<String> menu = List.of("1. Lihat Menu Makanan","2. Keranjang","3. Checkout","4. Exit");
+        
+        System.out.println("\n============ MENU UTAMA ============\n");
+        
+        for(String m: menu){
+            System.out.println(m);
+        }
 
-            List<Food> foods = foodRepository.getAllFoods();
-
-            Scanner input = new Scanner(System.in);
-
-            List<String> menu = List.of("1. Lihat Menu Makanan","2. Keranjang","3. Checkout","4. Exit");
-
-            System.out.println("\n============ MENU UTAMA ============\n");
-            
-            for(String m: menu){
-                System.out.println(m);
-            }
-
-
-            System.out.println("Silahkan pilih menu (1-4): ");
-            int inputMenu = input.nextInt();
-
+        OrderService orderService = new OrderService(foodRepository, cart,input);
+        
+        
+        System.out.println("Silahkan pilih menu (1-4): ");
+        int inputMenu = input.nextInt();
+        
             switch (inputMenu) {
                 case 1:
-                    System.out.println("\n==================================");
-                    System.out.println("         MENU MAKANAN         ");
-                    System.out.println("==================================");
-                    System.out.println();
-
-                    for (Food food : foods) {
-                        System.out.println(food.showProduct());
-                    }
-
-                    System.out.println();
-                    System.out.println("==================================");
-                    System.out.println();
-
-                    input.nextLine();
-                    System.out.println("Pilih makanan: ");
-                    String chooseFoodId = input.nextLine();
-
-                    System.out.println("Masukkan quantity: ");
-                    int orderQuantity = input.nextInt();
-
-                    try {
-                        Food selectedFood = findFood(foods, chooseFoodId)
-                        .orElseThrow(() -> new NoSuchElementException("Makanan tidak ditemukan"));
-
-                        cart.addItem(selectedFood, orderQuantity);
-                        System.out.println("\n"+selectedFood.getName()+" Berhasil ditambahkan ke keranjang "+orderQuantity+" porsi !");    
-                        
-                    } catch (NoSuchElementException e) {
-                        System.out.println("Error : " + e.getMessage());
-                    }
-                    
+                    orderService.orderAndShowMenu();
                     break;
                 case 2:
                     System.out.println();
@@ -133,7 +105,6 @@ public class App
                     System.out.println("Total \t\tRp."+totalPayment);
                     System.out.println("Bayar \t\tRp"+balance);
 
-                    // TODO: biar payment method masuk sbg Cash / Qris
                     if(paymentMethod.equals("1".trim())){
 
                         CashPayment cash = new CashPayment(balance);
