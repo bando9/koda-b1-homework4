@@ -10,6 +10,7 @@ import com.homework4.model.Cart;
 import com.homework4.model.CartItem;
 import com.homework4.model.CashPayment;
 import com.homework4.model.Food;
+import com.homework4.model.QrisPayment;
 import com.homework4.repository.FoodRepository;
 
 public class App 
@@ -133,21 +134,21 @@ public class App
                     System.out.println("Bayar \t\tRp"+balance);
 
                     // TODO: biar payment method masuk sbg Cash / Qris
-                    if(paymentMethod == "1".trim()){
+                    if(paymentMethod.equals("1".trim())){
 
-                        // CashPayment cash = new CashPayment(balance);
+                        CashPayment cash = new CashPayment(balance);
+                        cash.Purchase(balance, totalPayment);
 
-                        // cash.Purchase(balance, totalPayment);
-                        System.out.println("Pembayaran Cash");
-
-                    }else if(paymentMethod == "2".trim()){
-                        System.out.println("Pembayaran QRIS");
+                    }else if(paymentMethod.equals("2".trim())){
+                        QrisPayment cash = new QrisPayment(balance);
+                        cash.Purchase(balance, totalPayment);
                     } else{
                         System.out.println("Metode pembayaran belum tersedia");
                         return;
                     }
                     
                     System.out.println("Terima kasih sudah membeli!\n");
+
                     isRunningApp=false;
                     break;
                 case 4:
