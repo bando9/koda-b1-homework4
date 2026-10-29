@@ -1,4 +1,4 @@
-package com.homework4;
+package com.homework4.model;
 
 public class CartItem {
     private Food food;

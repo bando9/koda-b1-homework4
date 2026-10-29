@@ -6,6 +6,11 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 
+import com.homework4.model.Cart;
+import com.homework4.model.CartItem;
+import com.homework4.model.Food;
+import com.homework4.repository.FoodRepository;
+
 public class App 
 {
     public static void main( String[] args ){
@@ -18,25 +23,15 @@ public class App
         System.out.println("==================================");
         System.out.println();
         
+        // * Declare Cart
         Cart cart = new Cart();
 
-
         while(isRunningApp){
-
             // * Dependency injection
-            List<Food> foods = new ArrayList<>();
             
-            Food food1 = new Food("1", "Bakso Urat",13000, 10);
-            Food food2 = new Food("2", "Bakso Tetelan", 16000 , 20);
-            Food food3 = new Food("3", "Bakso Iga", 18000 , 15);
-            Food food4 = new Food("4", "Bakso Rudal", 20000 , 5);
-            Food food5 = new Food("5", "Bakso Telor", 20000, 50);
+            FoodRepository foodRepository = new FoodRepository();
 
-            foods.add(food1);
-            foods.add(food2);
-            foods.add(food3);
-            foods.add(food4);
-            foods.add(food5);
+            List<Food> foods = foodRepository.getAllFoods();
 
             Scanner input = new Scanner(System.in);        
 
@@ -54,7 +49,7 @@ public class App
 
             switch (inputMenu) {
                 case 1:
-                    System.out.println("==================================");
+                    System.out.println("\n==================================");
                     System.out.println("         MENU MAKANAN         ");
                     System.out.println("==================================");
                     System.out.println();
@@ -67,41 +62,26 @@ public class App
                     System.out.println("==================================");
                     System.out.println();
 
-                    // System.out.println("Pilih makanan: ");
-                    // String chooseFoodId = input.nextLine();
+                    input.nextLine();
+                    System.out.println("Pilih makanan: ");
+                    String chooseFoodId = input.nextLine();
 
-                    // System.out.println("Masukkan quantity: ");
-                    // int inputQuantity = input.nextInt();
-
-                    // TODO: mencari food sesuai i.
+                    System.out.println("Masukkan quantity: ");
+                    int orderQuantity = input.nextInt();
 
                     try {
-                        Food selectedFood = findFood(foods, "1")
+                        Food selectedFood = findFood(foods, chooseFoodId)
                         .orElseThrow(() -> new NoSuchElementException("Makanan tidak ditemukan"));
 
-                        cart.addItem(selectedFood, 2);
-                        System.out.println(selectedFood.getName()+" Berhasil ditambahkan ke keranjang!");    
+                        cart.addItem(selectedFood, orderQuantity);
+                        System.out.println("\n"+selectedFood.getName()+" Berhasil ditambahkan ke keranjang "+orderQuantity+" porsi !");    
                         
-                        int k = 0;
-                        for(CartItem item : cart.getItems()){
-                            Food food = item.getFood();
-                            k++;
-                            System.out.println(k+". "+food.getName()+" ("+item.getQuantity()+ "x)" +"\t = "+"Rp."+item.getSubTotal());
-                        }
-
-
                     } catch (NoSuchElementException e) {
                         System.out.println("Error : " + e.getMessage());
                     }
-
                     
                     break;
                 case 2:
-                    System.out.println();
-
-                    // * Declare Cart
-
-
                     System.out.println();
                     System.out.println("==================================");
                     System.out.println("             KERANJANG            ");
@@ -113,7 +93,7 @@ public class App
                     for(CartItem item : cart.getItems()){
                         Food food = item.getFood();
                         i++;
-                        System.out.println(i+" "+food.getName()+" "+item.getQuantity()+ " porsi x" +" Rp."+food.getPrice()+" = "+"Rp."+item.getSubTotal());
+                        System.out.println(i+". "+food.getName()+" "+item.getQuantity()+ " porsi x" +" Rp."+food.getPrice()+" = "+"Rp."+item.getSubTotal());
                     }
                     
                     System.out.println();
@@ -121,13 +101,25 @@ public class App
                     System.out.println("TOTAL PEMBAYARAN = Rp."+cart.calculateTotal());
                     System.out.println("==================================");
                     System.out.println("Checkout (Y/N): ");
-                    String isCheckOut = input.nextLine();               
+                    String isCheckOut = input.nextLine();
+                    input.nextLine();
                     break;
                 case 3:
                     System.out.println();
-                    System.out.println("Checkout");
+                    System.out.println("Metode Pembayaran: ");
+                    System.out.println("1. Cash");
+                    System.out.println("2. QRIS");
+                    
+                    input.nextLine();
+                    System.out.println("Pilih metode: ");
+                    String method = input.nextLine();
+                    
+                    System.out.println("Masukkan uang");
+                    int balance = input.nextInt();
 
-                    System.out.println("=============== RECEIPT ===============");
+                    int refund = balance - cart.calculateTotal();
+                    
+                    System.out.println("=============== RECEIPT ===============\n");
 
                     int j = 0;
                     for(CartItem item : cart.getItems()){
@@ -136,9 +128,12 @@ public class App
                         System.out.println(j+". "+food.getName()+" ("+item.getQuantity()+ "x)" +"\t = "+"Rp."+item.getSubTotal());
                     }
 
-                    System.out.println("---------------------------------------");
-                    System.out.println("Total              \t\t\t\tRp."+cart.calculateTotal());
-                    System.out.println("Bayar  Rp50.000"+"\nKembalian  Rp5.000"+"\nTerima kasih sudah membeli!");
+                    System.out.println("\n---------------------------------------");
+                    System.out.println("Total \t\tRp."+cart.calculateTotal());
+                    System.out.println("Bayar \t\tRp"+balance);
+                    System.out.println("Kembalian  \tRp"+refund);
+                    System.out.println("Terima kasih sudah membeli!\n");
+                    isRunningApp=false;
                     break;
                 case 4:
                     System.out.println("Exit");

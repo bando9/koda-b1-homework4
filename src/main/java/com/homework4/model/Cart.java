@@ -1,4 +1,4 @@
-package com.homework4;
+package com.homework4.model;
 
 import java.util.ArrayList;
 import java.util.List;
