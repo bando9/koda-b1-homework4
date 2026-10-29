@@ -5,6 +5,9 @@ public class CartItem {
     private int quantity;
 
     public CartItem(Food food, int quantity){
+        if(quantity < 0){
+            throw new IllegalArgumentException("quantity must be more then 0");
+        }
         this.food = food;
         this.quantity=quantity;
     }

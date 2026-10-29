@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import com.homework4.model.Cart;
 import com.homework4.model.CartItem;
+import com.homework4.model.CashPayment;
 import com.homework4.model.Food;
 import com.homework4.repository.FoodRepository;
 
@@ -33,7 +34,7 @@ public class App
 
             List<Food> foods = foodRepository.getAllFoods();
 
-            Scanner input = new Scanner(System.in);        
+            Scanner input = new Scanner(System.in);
 
             List<String> menu = List.of("1. Lihat Menu Makanan","2. Keranjang","3. Checkout","4. Exit");
 
@@ -105,6 +106,7 @@ public class App
                     input.nextLine();
                     break;
                 case 3:
+                    int totalPayment = cart.calculateTotal();
                     System.out.println();
                     System.out.println("Metode Pembayaran: ");
                     System.out.println("1. Cash");
@@ -112,13 +114,11 @@ public class App
                     
                     input.nextLine();
                     System.out.println("Pilih metode: ");
-                    String method = input.nextLine();
-                    
+                    String paymentMethod = input.nextLine();
+
                     System.out.println("Masukkan uang");
                     int balance = input.nextInt();
 
-                    int refund = balance - cart.calculateTotal();
-                    
                     System.out.println("=============== RECEIPT ===============\n");
 
                     int j = 0;
@@ -129,9 +129,24 @@ public class App
                     }
 
                     System.out.println("\n---------------------------------------");
-                    System.out.println("Total \t\tRp."+cart.calculateTotal());
+                    System.out.println("Total \t\tRp."+totalPayment);
                     System.out.println("Bayar \t\tRp"+balance);
-                    System.out.println("Kembalian  \tRp"+refund);
+
+                    // TODO: biar payment method masuk sbg Cash / Qris
+                    if(paymentMethod == "1".trim()){
+
+                        // CashPayment cash = new CashPayment(balance);
+
+                        // cash.Purchase(balance, totalPayment);
+                        System.out.println("Pembayaran Cash");
+
+                    }else if(paymentMethod == "2".trim()){
+                        System.out.println("Pembayaran QRIS");
+                    } else{
+                        System.out.println("Metode pembayaran belum tersedia");
+                        return;
+                    }
+                    
                     System.out.println("Terima kasih sudah membeli!\n");
                     isRunningApp=false;
                     break;
