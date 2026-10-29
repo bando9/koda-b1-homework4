@@ -1,12 +1,12 @@
 package com.homework4;
 
 public class Food {
-    private int id;
+    private String id;
     private String name;
     private int price;
     private int stock;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -21,7 +21,7 @@ public class Food {
         return stock;
     }
 
-    public Food(int id, String name, int price, int stock){
+    public Food(String id, String name, int price, int stock){
         this.id = id;
         this.name = name;
         this.price = price;
