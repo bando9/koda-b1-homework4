@@ -28,7 +28,6 @@ public class App
         
         // * Declare Cart
         Cart cart = new Cart();
-
         
         FoodRepository foodRepository = new FoodRepository();
         
@@ -53,73 +52,13 @@ public class App
         
             switch (inputMenu) {
                 case 1:
-                    orderService.orderAndShowMenu();
+                    orderService.showMenuAndOrder();
                     break;
                 case 2:
-                    System.out.println();
-                    System.out.println("==================================");
-                    System.out.println("             KERANJANG            ");
-                    System.out.println("==================================");
-                    System.out.println();
-                    
-                    // * Show Cart Item
-                    int i = 0;
-                    for(CartItem item : cart.getItems()){
-                        Food food = item.getFood();
-                        i++;
-                        System.out.println(i+". "+food.getName()+" "+item.getQuantity()+ " porsi x" +" Rp."+food.getPrice()+" = "+"Rp."+item.getSubTotal());
-                    }
-                    
-                    System.out.println();
-                    System.out.println("==================================");
-                    System.out.println("TOTAL PEMBAYARAN = Rp."+cart.calculateTotal());
-                    System.out.println("==================================");
-                    System.out.println("Checkout (Y/N): ");
-                    String isCheckOut = input.nextLine();
-                    input.nextLine();
+                    orderService.showCart(cart, input);
                     break;
                 case 3:
-                    int totalPayment = cart.calculateTotal();
-                    System.out.println();
-                    System.out.println("Metode Pembayaran: ");
-                    System.out.println("1. Cash");
-                    System.out.println("2. QRIS");
-                    
-                    input.nextLine();
-                    System.out.println("Pilih metode: ");
-                    String paymentMethod = input.nextLine();
-
-                    System.out.println("Masukkan uang");
-                    int balance = input.nextInt();
-
-                    System.out.println("=============== RECEIPT ===============\n");
-
-                    int j = 0;
-                    for(CartItem item : cart.getItems()){
-                        Food food = item.getFood();
-                        j++;
-                        System.out.println(j+". "+food.getName()+" ("+item.getQuantity()+ "x)" +"\t = "+"Rp."+item.getSubTotal());
-                    }
-
-                    System.out.println("\n---------------------------------------");
-                    System.out.println("Total \t\tRp."+totalPayment);
-                    System.out.println("Bayar \t\tRp"+balance);
-
-                    if(paymentMethod.equals("1".trim())){
-
-                        CashPayment cash = new CashPayment(balance);
-                        cash.Purchase(balance, totalPayment);
-
-                    }else if(paymentMethod.equals("2".trim())){
-                        QrisPayment cash = new QrisPayment(balance);
-                        cash.Purchase(balance, totalPayment);
-                    } else{
-                        System.out.println("Metode pembayaran belum tersedia");
-                        return;
-                    }
-                    
-                    System.out.println("Terima kasih sudah membeli!\n");
-
+                    orderService.checkout(cart, input);
                     isRunningApp=false;
                     break;
                 case 4:
@@ -132,12 +71,6 @@ public class App
             }
         }        
         
-    }
-
-    static Optional<Food> findFood(
-    List<Food> foods, String foodID) {
-    return foods.stream().filter(food ->
-    food.getId().equals(foodID)).findFirst();
     }
 
 }
