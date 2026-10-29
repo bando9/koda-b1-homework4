@@ -5,10 +5,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import com.homework4.model.Food;
-import com.homework4.model.QrisPayment;
 import com.homework4.model.Cart;
 import com.homework4.model.CartItem;
-import com.homework4.model.CashPayment;
 import com.homework4.repository.FoodRepository;
 
 public class OrderService {
@@ -115,32 +113,8 @@ public class OrderService {
                     System.out.println("Masukkan uang");
                     int balance = input.nextInt();
 
-                    System.out.println("=============== RECEIPT ===============\n");
+                    PaymentService paymentService = new PaymentService(cart, totalPayment, balance, paymentMethod);
 
-                    int j = 0;
-                    for(CartItem item : cart.getItems()){
-                        Food food = item.getFood();
-                        j++;
-                        System.out.println(j+". "+food.getName()+" ("+item.getQuantity()+ "x)" +"\t = "+"Rp."+item.getSubTotal());
-                    }
-
-                    System.out.println("\n---------------------------------------");
-                    System.out.println("Total \t\tRp."+totalPayment);
-                    System.out.println("Bayar \t\tRp"+balance);
-
-                    if(paymentMethod.equals("1".trim())){
-
-                        CashPayment cash = new CashPayment(balance);
-                        cash.Purchase(balance, totalPayment);
-
-                    }else if(paymentMethod.equals("2".trim())){
-                        QrisPayment cash = new QrisPayment(balance);
-                        cash.Purchase(balance, totalPayment);
-                    } else{
-                        System.out.println("Metode pembayaran belum tersedia");
-                        return;
-                    }
-                    
-                    System.out.println("Terima kasih sudah membeli!\n");
+                    paymentService.showReceipt();
     }
 }

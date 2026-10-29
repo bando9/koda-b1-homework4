@@ -1,4 +1,4 @@
-package com.homework4.model;
+package com.homework4.service;
 
 import com.homework4.interfaces.Payment;
 

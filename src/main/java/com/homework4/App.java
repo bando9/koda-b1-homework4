@@ -8,11 +8,11 @@ import java.util.Scanner;
 
 import com.homework4.model.Cart;
 import com.homework4.model.CartItem;
-import com.homework4.model.CashPayment;
 import com.homework4.model.Food;
-import com.homework4.model.QrisPayment;
 import com.homework4.repository.FoodRepository;
+import com.homework4.service.CashPayment;
 import com.homework4.service.OrderService;
+import com.homework4.service.QrisPayment;
 
 public class App 
 {
