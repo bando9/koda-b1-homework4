@@ -1,0 +1,15 @@
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\bin\Debug\net10.0\Resto.Console.exe
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\bin\Debug\net10.0\Resto.Console.deps.json
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\bin\Debug\net10.0\Resto.Console.runtimeconfig.json
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\bin\Debug\net10.0\Resto.Console.dll
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\bin\Debug\net10.0\Resto.Console.pdb
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.GeneratedMSBuildEditorConfig.editorconfig
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.AssemblyInfoInputs.cache
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.AssemblyInfo.cs
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.csproj.CoreCompileInputs.cache
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.sourcelink.json
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.dll
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\refint\Resto.Console.dll
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.pdb
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\Resto.Console.genruntimeconfig.cache
+E:\code\koda-projects\1-task\koda-b1-homework4\dotnet\src\Resto.Console\obj\Debug\net10.0\ref\Resto.Console.dll
