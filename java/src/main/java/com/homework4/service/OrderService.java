@@ -61,8 +61,20 @@ public class OrderService {
     }
 
 
-    public void showCart(Cart cart,Scanner input, boolean isRunningApp){
-        System.out.println();
+    public void showCart(Cart cart,Scanner input){
+        if(cart.isEmpty()){
+             System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
+             input.nextLine();
+            return;
+        } 
+
+        boolean inCartMenu = true;
+
+        while (inCartMenu) {
+            
+        
+
+                    System.out.println();
                     System.out.println("==================================");
                     System.out.println("             KERANJANG            ");
                     System.out.println("==================================");
@@ -77,32 +89,51 @@ public class OrderService {
                     }
                     
                     System.out.println();
-                    System.out.println("==================================");
+                    System.out.println("----------------------------------");
                     System.out.println("TOTAL PEMBAYARAN = Rp."+cart.calculateTotal());
                     System.out.println("==================================");
-                    
+
+                    System.out.println();
+                    System.out.println();
+
+                    System.out.println("\nOpsi Keranjang:");
+                    System.out.println("1. Ubah jumlah porsi");
+                    System.out.println("2. Hapus orderan");
+                    System.out.println("3. Lanjut checkout");
+                    System.out.println("4. Kembali ke Menu Utama");
+
                     input.nextLine();
-                    System.out.println("Checkout (Y/N): ");
-                    String isCheckOut = input.nextLine();
-                    
-
-                    // TODO: akses pembayaran !
-
-                    List<String> validInput = List.of("y", "ya", "yes");
-
-                    if(validInput.contains(isCheckOut.trim().toLowerCase())){
-                        checkout(cart, input);
-                        isRunningApp = false;
-                    } else {
-                        System.out.println("\nBatal checkout, kembali ke menu utama!");
+                    String choice = input.nextLine();
+                    switch (choice) {
+                        case "1":
+                            // updateQuantity(cart, input);
+                            break;
+                        case "2":
+                            removeOrder(cart, input);
+                            break;
+                        case "3":
+                            checkout(cart, input);
+                            break;
+                        case "4":
+                            inCartMenu = false;
+                                                    
+                        default:
+                            System.out.println("Pilihan tidak valid!");
+                            break;
                     }
-
+                
+                }
 
     }
 
     public  void checkout(Cart cart, Scanner input){
+        if(cart.isEmpty()){
+            System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
+            input.nextLine();
+            return;
+        } 
 
-        int totalPayment = cart.calculateTotal();
+            int totalPayment = cart.calculateTotal();
                     System.out.println();
                     System.out.println("Metode Pembayaran: ");
                     System.out.println("1. Cash");
@@ -114,8 +145,50 @@ public class OrderService {
                     System.out.println("Masukkan uang");
                     int balance = input.nextInt();
 
-                    PaymentService paymentService = new PaymentService(cart, totalPayment, balance, paymentMethod);
+                    if(balance <= 0 || balance < totalPayment){
+                        System.out.println("\nMaaf saldo tidak mencukupi!");
+                    } else {
+                        PaymentService paymentService = new PaymentService(cart, totalPayment, balance, paymentMethod);
+                        paymentService.showReceipt();
+                        cart.clearCart();
+                    }
+        
+    }
 
-                    paymentService.showReceipt();
+
+
+
+    // private void updateQuantity(Cart cart, Scanner input){
+    //     System.out.println("\nMasukkan ID makanan dari keranjang yg mau diubah:");
+    //     String foodId = input.nextLine();
+
+    //     System.out.println("Masukkan jumlah porsi baru: ");
+    //     try {
+
+    //         int newQuantity = input.nextInt();
+    //         boolean updated = cart.updateQuantity(foodId, newQuantity);
+
+    //         if(updated){
+    //             System.out.println("Berhasil memperbarui jumlah porsi!");
+    //         }else{
+    //             System.out.println("Makanan dg ID tersebut tidak ada.");
+    //         }
+    //     } catch (NumberFormatException e) {
+    //         System.out.println("Input jumlah porsi harus berupa angka!");
+    //     }
+    // }
+
+
+    // TODO: hapus pesanan
+
+    public void removeOrder(Cart cart, Scanner input){
+        System.out.println("Masukkan id makanan yg mau dihapus.");
+
+        input.nextLine();
+        int removeFoodId = input.nextInt() -1;
+        
+        if(removeFoodId>=0 || removeFoodId<cart.size()){
+            cart.removeItem(removeFoodId);
+        }            
     }
 }

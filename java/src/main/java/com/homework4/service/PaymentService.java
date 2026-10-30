@@ -45,6 +45,14 @@ public class PaymentService {
                     }
                     
                     System.out.println("Terima kasih sudah membeli!\n");
-    }
+                    try{
+
+                        System.out.println("\n\nKeranjang sedang dibersihkan...");
+                        Thread.sleep(500);
+                    }catch(InterruptedException e){
+                        System.out.println("Maaf, terjadi kesalahan sistem.");
+                    }
+                    System.out.println("\nMau pesen apa lagi gais ?\n");
+                }
 
 }

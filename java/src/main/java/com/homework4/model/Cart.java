@@ -11,8 +11,8 @@ public class Cart {
         this.items = new ArrayList<>();
     }
 
-    public int length(){
-        return items.size();
+    public boolean isEmpty(){
+        return items.isEmpty();
     }
 
     public int calculateTotal(){
@@ -24,20 +24,19 @@ public class Cart {
     }
 
     public void addItem(Food food, int quantity){
+        if(quantity <= 0 ){
+            System.out.println("Jumlah tidak bisa kurang dari 0");
+            return;
+        }
         items.add(new CartItem(food, quantity));
     }
-
-    // public void reduceItemQuantity(Food food, int quantity){
-    //     items.set
-    // }
-
-    // public void removeItem(CartItem food){
-    //     items.remove(findItemByFood(food));    
-    // }
-
-    // private Optional<Food> findItemByFood(Food food){
-    //     return items.stream().filter(item -> item.getFood().getId().equals(food.getId())).findFirst();
-    // }
+    
+    public void removeItem(int index){
+        if(index<0 || index>items.size()){
+            throw new IllegalArgumentException("Id makanan tidak ditemukan");
+        }
+        items.remove(index);
+    }
 
     public void clearCart(){
         items.clear();
@@ -45,5 +44,8 @@ public class Cart {
 
     public List<CartItem> getItems(){
         return items;
+    }
+    public void getFood(){
+        items.size();
     }
 }

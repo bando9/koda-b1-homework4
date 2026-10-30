@@ -44,5 +44,11 @@ public class Food {
         return (this.id+". "+ this.name+" - " + "Rp."+this.price+" (stock: "+this.stock+")");
     }
 
-    
+    public void reduceStock(int quantity){
+        if(quantity<=0){
+            throw new IllegalArgumentException("Quantity must be more than 0");
+        } 
+
+        stock -=quantity;
+    }
 }

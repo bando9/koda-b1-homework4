@@ -55,21 +55,11 @@ public class App
                     orderService.showMenuAndOrder();
                     break;
                 case 2:
-                    if(cart.length() <= 0){
-                        System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
-                    } else {
-                        orderService.showCart(cart, input, isRunningApp);
-                    }
+                    orderService.showCart(cart, input);
                     break;
                 case 3:
-                    if(cart.length() <= 0){
-                        System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
-                        return;
-                    } else {
-                        input.nextLine();
-                        orderService.checkout(cart, input);
-                    }
-                    isRunningApp=false;
+                    input.nextLine();
+                    orderService.checkout(cart, input);
                     break;
                 case 4:
                     System.out.println("Exit");
