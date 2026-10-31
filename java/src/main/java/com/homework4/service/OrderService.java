@@ -111,6 +111,9 @@ public class OrderService {
                             break;
                         case "2":
                             removeOrder(cart, input);
+                            if(cart.isEmpty()){
+                                inCartMenu = false;
+                            }
                             break;
                         case "3":
                             checkout(cart, input);
@@ -131,6 +134,7 @@ public class OrderService {
     public  void checkout(Cart cart, Scanner input){
         if(cart.isEmpty()){
             System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
+            System.out.println("[Press any button...]");
             input.nextLine();
             return;
         } 
@@ -181,8 +185,6 @@ public class OrderService {
     // }
 
 
-    // TODO: hapus pesanan
-
     public void removeOrder(Cart cart, Scanner input){
         if(cart.isEmpty()){
             System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
@@ -194,10 +196,9 @@ public class OrderService {
         int removeFoodId = input.nextInt() -1;
 
         try {
-            
-            
             if(removeFoodId>=0 || removeFoodId<cart.sizeItems()){
                 cart.removeItem(removeFoodId);
+                System.out.println("Pesanan berhasil dihapus.");
             } else{
                 System.out.println("Id makanan tidak ditemukan");
             }
@@ -205,4 +206,6 @@ public class OrderService {
             System.out.println("ID makanan tidak ditemukan.");
         }
     }
+
+    
 }
