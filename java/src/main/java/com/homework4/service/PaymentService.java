@@ -48,7 +48,7 @@ public class PaymentService {
                     try{
 
                         System.out.println("\n\nKeranjang sedang dibersihkan...");
-                        Thread.sleep(500);
+                        Thread.sleep(3000);
                     }catch(InterruptedException e){
                         System.out.println("Maaf, terjadi kesalahan sistem.");
                     }

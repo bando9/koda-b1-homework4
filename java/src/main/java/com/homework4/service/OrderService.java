@@ -103,11 +103,12 @@ public class OrderService {
                     System.out.println("4. Kembali ke Menu Utama");
 
                     System.out.println("Pilih opsi (1-4)");
-                    // input.nextLine();
+                    
                     String choice = input.nextLine();
+                    
                     switch (choice) {
                         case "1":
-                            System.out.println("updateQuantity(cart, input)");;
+                            updateQuantityFood(cart, input);
                             break;
                         case "2":
                             removeOrder(cart, input);
@@ -121,7 +122,6 @@ public class OrderService {
                             break;
                         case "4":
                             inCartMenu = false;
-
                         default:
                             System.out.println("Pilihan tidak valid!");
                             break;
@@ -164,25 +164,20 @@ public class OrderService {
 
 
 
-    // private void updateQuantity(Cart cart, Scanner input){
-    //     System.out.println("\nMasukkan ID makanan dari keranjang yg mau diubah:");
-    //     String foodId = input.nextLine();
+    private void updateQuantityFood(Cart cart, Scanner input){
+        System.out.println("\nMasukkan ID makanan dari keranjang yg mau diubah:");
+        String foodId = input.nextLine();
 
-    //     System.out.println("Masukkan jumlah porsi baru: ");
-    //     try {
+        System.out.println("Masukkan jumlah porsi baru: ");
+        
+        try {
 
-    //         int newQuantity = input.nextInt();
-    //         boolean updated = cart.updateQuantity(foodId, newQuantity);
-
-    //         if(updated){
-    //             System.out.println("Berhasil memperbarui jumlah porsi!");
-    //         }else{
-    //             System.out.println("Makanan dg ID tersebut tidak ada.");
-    //         }
-    //     } catch (NumberFormatException e) {
-    //         System.out.println("Input jumlah porsi harus berupa angka!");
-    //     }
-    // }
+            int newQuantity = Integer.parseInt(input.nextLine());
+            cart.updateQuantity(foodId, newQuantity);
+        } catch (NumberFormatException e) {
+            System.out.println("Input jumlah porsi harus berupa angka!");
+        }
+    }
 
 
     public void removeOrder(Cart cart, Scanner input){

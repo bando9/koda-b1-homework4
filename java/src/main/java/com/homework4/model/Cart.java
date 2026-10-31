@@ -48,4 +48,30 @@ public class Cart {
     public int sizeItems(){
         return items.size();
     }
+
+    public boolean updateQuantity(String foodId, int newQuantity){
+        Optional<CartItem> optionalItem = items.stream().filter(item -> item.getFood().getId().equalsIgnoreCase(foodId.trim())).findFirst();
+
+        if(optionalItem.isEmpty()){
+            System.out.println("Item dg ID '"+foodId+"' tidak ditemukan");
+            return false;
+        }
+
+        CartItem item = optionalItem.get();
+
+        if(newQuantity <= 0){
+            items.remove(item);
+            System.out.println("quantity dibawah 0 tidak bisa dimasukkan. Item dihapus dari keranjang.");
+            return true;
+        }
+
+        if(newQuantity > item.getFood().getStock()){
+            System.out.println("Maaf stock terbatas, stock tersisa "+item.getFood().getStock());
+            return false;
+        }
+
+        item.setQuantity(newQuantity);
+        System.out.printf("%s porsi terbaru berjumlah %d porsi", item.getFood().getName(), newQuantity);
+        return true;
+    }
 }
