@@ -8,6 +8,9 @@ bool isRunningApp = true;
 
 OrderService orderService = new();
 
+Cart cart = new();
+
+
 while (isRunningApp)
 {
 
@@ -26,13 +29,13 @@ while (isRunningApp)
     switch (choiceMenu)
     {
         case "1":
-            orderService.ShowAndOrderFood();
+            orderService.ShowAndOrderFood(cart);
             break;
         case "2":
             orderService.SearchFoodByName();
             break;
         case "3":
-            orderService.ShowCart();
+            orderService.ShowCart(cart);
             break;
         case "4":
             orderService.Checkout();

@@ -2,10 +2,10 @@ namespace Resto.Console.Models;
 
 public class CartItem
 {
-    public MenuItem Item {get;set;}
+    public Food Item {get;set;}
     public int Quantity {get;set;}
 
-    public CartItem(MenuItem item,int quantity)
+    public CartItem(Food item,int quantity)
     {
         Item=item;
         Quantity=quantity;
@@ -13,6 +13,6 @@ public class CartItem
 
     public decimal Subtotal()
     {
-        return Item.Price * Quantity;
+        return Item.Price* Quantity;
     }
 }
