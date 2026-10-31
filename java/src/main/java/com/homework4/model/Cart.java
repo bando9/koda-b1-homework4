@@ -45,7 +45,7 @@ public class Cart {
     public List<CartItem> getItems(){
         return items;
     }
-    public void getFood(){
-        items.size();
+    public int sizeItems(){
+        return items.size();
     }
 }

@@ -102,21 +102,23 @@ public class OrderService {
                     System.out.println("3. Lanjut checkout");
                     System.out.println("4. Kembali ke Menu Utama");
 
-                    input.nextLine();
+                    System.out.println("Pilih opsi (1-4)");
+                    // input.nextLine();
                     String choice = input.nextLine();
                     switch (choice) {
                         case "1":
-                            // updateQuantity(cart, input);
+                            System.out.println("updateQuantity(cart, input)");;
                             break;
                         case "2":
                             removeOrder(cart, input);
                             break;
                         case "3":
                             checkout(cart, input);
+                            inCartMenu = false;
                             break;
                         case "4":
                             inCartMenu = false;
-                                                    
+
                         default:
                             System.out.println("Pilihan tidak valid!");
                             break;
@@ -182,13 +184,25 @@ public class OrderService {
     // TODO: hapus pesanan
 
     public void removeOrder(Cart cart, Scanner input){
-        System.out.println("Masukkan id makanan yg mau dihapus.");
+        if(cart.isEmpty()){
+            System.out.println("\nKeranjang kosong. Pesan terlebih dahulu!");
+            input.nextLine();
+            return;
+        } 
 
-        input.nextLine();
+        System.out.println("Masukkan id makanan yg mau dihapus:");
         int removeFoodId = input.nextInt() -1;
-        
-        if(removeFoodId>=0 || removeFoodId<cart.size()){
-            cart.removeItem(removeFoodId);
-        }            
+
+        try {
+            
+            
+            if(removeFoodId>=0 || removeFoodId<cart.sizeItems()){
+                cart.removeItem(removeFoodId);
+            } else{
+                System.out.println("Id makanan tidak ditemukan");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("ID makanan tidak ditemukan.");
+        }
     }
 }
