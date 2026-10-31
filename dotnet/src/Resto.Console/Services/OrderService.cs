@@ -14,13 +14,11 @@ public class OrderService
             OrderService.InitFoodsAndShow();
 
             System.Console.WriteLine("==================================");
-
-            List<Food> foods = OrderService.foods();
-
             
             System.Console.WriteLine("Pilih makanan (id): ");
             String? selectFoodId = Console.ReadLine();
 
+            List<Food> foods = OrderService.foods();
             Food? foundFood = foods.FirstOrDefault(food => food.Id == selectFoodId);
 
             if(foundFood is null)
@@ -35,11 +33,12 @@ public class OrderService
 
             if(inputQuantity > 0 && inputQuantity <= foundFood?.Stock)
             {
+                cart.AddItem(foundFood,inputQuantity);
                 System.Console.WriteLine($"{foundFood.Name} sebanyak {inputQuantity} porsi sudah dicatet!");
+            } else
+            {
+                System.Console.WriteLine("Maaf, stok terbatas gan.");
             }
-
-            cart.addItem(foundFood,inputQuantity);
-
         }
         catch (InvalidOperationException)
         {
@@ -50,19 +49,26 @@ public class OrderService
     public void ShowCart(Cart cart)
     {
 
-        if (cart.isEmpty())
+        if (cart.IsEmpty())
         {
             System.Console.WriteLine("Keranjang masih kosong, monggo order dulu gan.");
             return;
         }
         else
         {
+            List<Food> foods = OrderService.foods();
+
             System.Console.WriteLine("\n==================================");
             System.Console.WriteLine("             KERANJANG            ");
             System.Console.WriteLine("==================================\n");
 
-            System.Console.WriteLine("----------------------------------");
-            System.Console.WriteLine("TOTAL PEMBAYARAN = Rp."+cart.TotalAmount()+"\n");
+            foreach(CartItem item in cart.getItems())
+            {
+                System.Console.WriteLine($"{item.Item.Name} {item.Quantity} porsi x Rp. {item.Item.Price:N0} Rp. {item.Subtotal():N0}");
+            }
+
+            System.Console.WriteLine("\n\n----------------------------------");
+            System.Console.WriteLine("TOTAL PEMBAYARAN = Rp."+cart.TotalAmount());
             System.Console.WriteLine("==================================");
 
             bool isCartOption  = true;
@@ -86,12 +92,13 @@ public class OrderService
                         System.Console.WriteLine(cartOption[0]);
                         break;
                     case "2":
-                        System.Console.WriteLine(cartOption[1]);
+                        // TODO: delete order
+                        OrderService.RemoveOrder(foods,cart);
                         break;
                     case "3":
-                        System.Console.WriteLine(cartOption[2]);
+                        Checkout(cart);
                         break;
-                    case "4":
+                    case "4": 
                         System.Console.WriteLine(cartOption[3]);
                         isCartOption=false;
                         break;
@@ -105,9 +112,17 @@ public class OrderService
         }
     }
 
-    public void Checkout()
+    public void Checkout(Cart cart)
     {
-        System.Console.WriteLine("\ntampilan checkout");
+         if (cart.IsEmpty())
+        {
+            System.Console.WriteLine("Keranjang masih kosong, monggo order dulu gan.");
+            return;
+        }
+        else
+        {
+            System.Console.WriteLine("\ntampilan checkout");
+        }
     }
 
     public void SearchFoodByName()
@@ -121,7 +136,7 @@ public class OrderService
 
         foreach(Food food in foods)
         {
-            System.Console.WriteLine($"{food.Id}. {food.Name} - {food.Price:N0} (Stok: {food.Stock})");
+            System.Console.WriteLine($"{food.Id}. {food.Name} - Rp.{food.Price:N0} (Stok: {food.Stock})");
         }
     }
 
@@ -129,12 +144,34 @@ public class OrderService
     {
         var foods = new List<Food>
         {
-            new Food("1", "Bakso Urat", 13000, 10),
-            new Food("2", "Bakso Tetelan", 16000, 20),
-            new Food("3", "Bakso Rudal", 20000, 5),
-            new Food("4", "Bakso Iga", 18000, 15),
-            new Food("5", "Bakso Telor", 20000, 50)
+            new Food("1", "Bakso Urat", 13_000, 10),
+            new Food("2", "Bakso Tetelan", 16_000, 20),
+            new Food("3", "Bakso Rudal", 20_000, 5),
+            new Food("4", "Bakso Iga", 18_000, 15),
+            new Food("5", "Bakso Telor", 20_000, 50)
         };
         return foods;
     }
+
+
+    // TODO:1. Ubah jumlah porsi
+    // public void UpdateQuantityFood(){} 
+    // TODO:2. Hapus orderan
+    public static void RemoveOrder(List<Food> foods, Cart cart)
+    {
+        System.Console.WriteLine("Makanan apa yg mau di cancel (id): ");
+        String? foodId = Console.ReadLine();
+
+        Food? foundFood = foods.FirstOrDefault(food => food.Id == foodId);
+
+        if(foundFood is null)
+        {
+            System.Console.WriteLine("Makanan yg mau dihapus emang blm dipesen (ERROR).");
+            return;
+        }
+
+        cart.RemoveItem(foundFood);
+
+    }
+
 }

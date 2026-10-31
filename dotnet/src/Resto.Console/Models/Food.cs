@@ -20,19 +20,29 @@ public class Food
         Stock=newStock;
     }
 
-    public int ReduceStock(int quantity)
+    public void ReduceStock(int quantity)
+    {
+        if (quantity <= 0)
+        {
+            System.Console.WriteLine("Quantity gabisa kurang dari 0");
+            return;
+        }
+
+        Stock-=quantity;
+    }
+
+    public int AddStock(int quantity)
     {
         if (quantity <= 0)
         {
             System.Console.WriteLine("Quantity gabisa kurang dari 0");
         }
-        return Stock-=quantity;
+        return Stock+=quantity;
     }
+
 
     public String getDetails()
     {
         return $"{Id}. {Name} - {Price} (Stok:{Stock})";
-
-        
     }
 }

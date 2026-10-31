@@ -38,7 +38,7 @@ while (isRunningApp)
             orderService.ShowCart(cart);
             break;
         case "4":
-            orderService.Checkout();
+            orderService.Checkout(cart);
             break;
         case "5":
             System.Console.WriteLine("Exit");

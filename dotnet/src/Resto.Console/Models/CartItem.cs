@@ -13,6 +13,9 @@ public class CartItem
 
     public decimal Subtotal()
     {
-        return Item.Price* Quantity;
+        decimal result = Item.Price * Quantity; 
+        return result;
     }
+
+
 }
