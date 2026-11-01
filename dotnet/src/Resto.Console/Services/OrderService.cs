@@ -1,5 +1,6 @@
 namespace Resto.Console.Models;
 using System;
+using Resto.Console.Services;
 
 public class OrderService
 {
@@ -97,6 +98,7 @@ public class OrderService
                         break;
                     case "3":
                         Checkout(cart);
+                        isCartOption=false;
                         break;
                     case "4": 
                         System.Console.WriteLine(cartOption[3]);
@@ -121,13 +123,94 @@ public class OrderService
         }
         else
         {
-            System.Console.WriteLine("\ntampilan checkout");
+           System.Console.WriteLine("Metode Pembayaran: ");
+           System.Console.WriteLine("1. Cash");
+           System.Console.WriteLine("2. QRIS");
+
+           System.Console.WriteLine("Pilih metode pembayaran: ");
+
+           string? selectedPayment = Console.ReadLine();
+
+            switch (selectedPayment)
+            {
+                case "1":
+                    System.Console.WriteLine("\nMasukkan nominal saldo:");
+                    decimal balance = int.Parse(Console.ReadLine());
+
+                    if(balance<0 || balance < cart.TotalAmount())
+                    {
+                        System.Console.WriteLine("Maaf saldo tidak cukup.");
+                        return;
+                    }
+
+                    CashPayment cash = new CashPayment(balance);
+                    cash.ProcessPayment(cart.TotalAmount());
+
+                    System.Console.WriteLine($"(validasi) Beneran bayar dg total Rp. {cart.TotalAmount()}?");
+                    bool isPay = bool.Parse(Console.ReadLine());
+                    
+                    if (isPay)
+                    {
+                        cash.GetPaymentName();
+                    }
+
+                    break;
+
+                case "2":
+                    System.Console.WriteLine("\nMasukkan nominal saldo:");
+                    decimal balanceUser = int.Parse(Console.ReadLine());
+
+                    if(balanceUser<0 || balanceUser < cart.TotalAmount())
+                    {
+                        System.Console.WriteLine("Maaf saldo tidak cukup.");
+                        return;
+                    }
+
+                    QrisPayment qris = new QrisPayment(balanceUser);
+                    qris.ProcessPayment(cart.TotalAmount());
+
+                    System.Console.WriteLine($"(validasi) Beneran bayar dg total Rp. {cart.TotalAmount()}?");
+                    bool isPayCash = bool.Parse(Console.ReadLine());
+                    
+                    if (isPayCash)
+                    {
+                        qris.GetPaymentName();
+                    }                    
+                    break;
+                default:
+                    System.Console.WriteLine("Metode pembayaran blm tersedia.");
+                    break;
+            }
+
+                
         }
     }
 
-    public void SearchFoodByName()
+    public async Task SearchFoodByName()
     {
-        System.Console.WriteLine("\ntampilan search menu makanan");
+        List<Food> foods = OrderService.foods();
+
+        System.Console.WriteLine("\n==================================");
+        System.Console.WriteLine("            CARI MAKANAN            ");
+        System.Console.WriteLine("==================================\n");
+        
+        var queryService = new FoodQueryService(foods);
+
+        System.Console.WriteLine("masukkan nama makanan:");
+        string? findFood = Console.ReadLine();
+
+        Food? result = await queryService.FindFoodAsync(findFood);
+
+
+        if(result is not null)
+        {
+            System.Console.WriteLine(result.getDetails() );
+        }
+        else
+        {
+            System.Console.WriteLine("Makanan blm ada di menu");
+        }
+
     }
 
     public static void InitFoodsAndShow()
@@ -160,7 +243,7 @@ public class OrderService
     public static void RemoveOrder(List<Food> foods, Cart cart)
     {
         System.Console.WriteLine("Makanan apa yg mau di cancel (id): ");
-        String? foodId = Console.ReadLine();
+        string? foodId = Console.ReadLine();
 
         Food? foundFood = foods.FirstOrDefault(food => food.Id == foodId);
 

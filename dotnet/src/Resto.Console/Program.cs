@@ -32,7 +32,7 @@ while (isRunningApp)
             orderService.ShowAndOrderFood(cart);
             break;
         case "2":
-            orderService.SearchFoodByName();
+            await orderService.SearchFoodByName();
             break;
         case "3":
             orderService.ShowCart(cart);

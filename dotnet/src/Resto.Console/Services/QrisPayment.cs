@@ -1,16 +1,35 @@
-using Resto.Console.Interfaces;
+using Resto.Console.Models;
 
 namespace Resto.Console.Services;
 
-public class QrisPayment : IPaymentMethod
+public class QrisPayment:BasePayment
 {
-    public bool processPayment(decimal totalAmount)
+    public QrisPayment(decimal balance)
     {
+        if (balance <= 0)
+        {
+            System.Console.WriteLine("Maaf gabisa, masak saldo kurang dari 0.");
+            return;
+        }
+
+        Balance=balance;
+    }
+    public override bool ProcessPayment(decimal totalAmount)
+    {
+
+        if(Balance <= totalAmount)
+        {
+            System.Console.WriteLine("Maaf gabisa bayar, saldomu dikit.");
+            return false;
+        }
+
+
         return true;
     }
 
-    public string getPaymentName()
+    public override string GetPaymentName()
     {
         return "Pembayaran Qris berhasil !"; 
     }
+    
 }
