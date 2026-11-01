@@ -1,5 +1,7 @@
 namespace Resto.Console.Models;
+
 using System;
+using Resto.Console.Interfaces;
 using Resto.Console.Services;
 
 public class OrderService
@@ -63,13 +65,15 @@ public class OrderService
             System.Console.WriteLine("             KERANJANG            ");
             System.Console.WriteLine("==================================\n");
 
+            int i = 0;
             foreach(CartItem item in cart.getItems())
             {
-                System.Console.WriteLine($"{item.Item.Name} {item.Quantity} porsi x Rp. {item.Item.Price:N0} Rp. {item.Subtotal():N0}");
+                i++;
+                System.Console.WriteLine($"{i}. {item.Item.Name} {item.Quantity} porsi x Rp. {item.Item.Price:N0} = Rp. {item.Subtotal():N0}");
             }
 
             System.Console.WriteLine("\n\n----------------------------------");
-            System.Console.WriteLine("TOTAL PEMBAYARAN = Rp."+cart.TotalAmount());
+            System.Console.WriteLine($"TOTAL PEMBAYARAN = Rp. {cart.TotalAmount():N0}");
             System.Console.WriteLine("==================================");
 
             bool isCartOption  = true;
@@ -123,6 +127,9 @@ public class OrderService
         }
         else
         {
+           decimal totalAmount = cart.TotalAmount();
+
+           System.Console.WriteLine($"\nTotal Tagihan: Rp.{totalAmount:N0}");
            System.Console.WriteLine("Metode Pembayaran: ");
            System.Console.WriteLine("1. Cash");
            System.Console.WriteLine("2. QRIS");
@@ -131,60 +138,35 @@ public class OrderService
 
            string? selectedPayment = Console.ReadLine();
 
-            switch (selectedPayment)
+           if(selectedPayment != "1" && selectedPayment != "2")
             {
-                case "1":
-                    System.Console.WriteLine("\nMasukkan nominal saldo:");
-                    decimal balance = int.Parse(Console.ReadLine());
-
-                    if(balance<0 || balance < cart.TotalAmount())
-                    {
-                        System.Console.WriteLine("Maaf saldo tidak cukup.");
-                        return;
-                    }
-
-                    CashPayment cash = new CashPayment(balance);
-                    cash.ProcessPayment(cart.TotalAmount());
-
-                    System.Console.WriteLine($"(validasi) Beneran bayar dg total Rp. {cart.TotalAmount()}?");
-                    bool isPay = bool.Parse(Console.ReadLine());
-                    
-                    if (isPay)
-                    {
-                        cash.GetPaymentName();
-                    }
-
-                    break;
-
-                case "2":
-                    System.Console.WriteLine("\nMasukkan nominal saldo:");
-                    decimal balanceUser = int.Parse(Console.ReadLine());
-
-                    if(balanceUser<0 || balanceUser < cart.TotalAmount())
-                    {
-                        System.Console.WriteLine("Maaf saldo tidak cukup.");
-                        return;
-                    }
-
-                    QrisPayment qris = new QrisPayment(balanceUser);
-                    qris.ProcessPayment(cart.TotalAmount());
-
-                    System.Console.WriteLine($"(validasi) Beneran bayar dg total Rp. {cart.TotalAmount()}?");
-                    bool isPayCash = bool.Parse(Console.ReadLine());
-                    
-                    if (isPayCash)
-                    {
-                        qris.GetPaymentName();
-                    }                    
-                    break;
-                default:
-                    System.Console.WriteLine("Metode pembayaran blm tersedia.");
-                    break;
+                System.Console.WriteLine("Metode pembayaran blm tersedia cuy.");
+                return;
             }
+            
+            PaymentService paymentService = new PaymentService();
+
+            System.Console.WriteLine("\nMasukkan nominal saldo:");
+            decimal balance = int.Parse(Console.ReadLine());
+
+            IPaymentMethod? payment = paymentService.ChoosePaymentMethod(selectedPayment, balance);
+
+            decimal change = balance - totalAmount;
+
+            if (payment.ProcessPayment(totalAmount))
+            {
+                paymentService.ShowReceipt(cart,balance);
+                System.Console.WriteLine($"Kembalian: Rp.{change:N0}\n\nPembayaran Cash Berhasil!");
+            }else
+            {
+                System.Console.WriteLine("Pembayaran gagal!");
+            }
+            
+        }
 
                 
-        }
     }
+
 
     public async Task SearchFoodByName()
     {
@@ -239,22 +221,30 @@ public class OrderService
 
     // TODO:1. Ubah jumlah porsi
     // public void UpdateQuantityFood(){} 
-    // TODO:2. Hapus orderan
     public static void RemoveOrder(List<Food> foods, Cart cart)
     {
-        System.Console.WriteLine("Makanan apa yg mau di cancel (id): ");
-        string? foodId = Console.ReadLine();
-
-        Food? foundFood = foods.FirstOrDefault(food => food.Id == foodId);
-
-        if(foundFood is null)
+        if (cart.Items.Count == 0)
         {
-            System.Console.WriteLine("Makanan yg mau dihapus emang blm dipesen (ERROR).");
+            System.Console.WriteLine("Keranjang belanjaanmu masih kosong.");
             return;
         }
 
-        cart.RemoveItem(foundFood);
+        System.Console.WriteLine("Makanan apa yg mau di cancel (id): ");
+        int itemIndex = int.Parse(Console.ReadLine());
+
+        Food? foundFood = foods.FirstOrDefault(food => food.Id == Convert.ToString(itemIndex));
+
+        System.Console.WriteLine($"{foundFood?.Name} berhasil dihapus dari keranjang.");
+
+        if (cart.Items.Count == 0)
+        {
+            System.Console.WriteLine("Keranjang belanjaanmu kosong. Belanja lagi yuk");
+            return;
+        }
+
+        cart.RemoveItem(itemIndex);
 
     }
+
 
 }

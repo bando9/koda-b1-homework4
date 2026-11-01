@@ -17,19 +17,21 @@ public class QrisPayment:BasePayment
     public override bool ProcessPayment(decimal totalAmount)
     {
 
-        if(Balance <= totalAmount)
-        {
-            System.Console.WriteLine("Maaf gabisa bayar, saldomu dikit.");
+        if(Balance < totalAmount)
+        { 
+            System.Console.WriteLine("Maaf gabisa bayar, saldo QRIS-mu dikit.");
             return false;
         }
 
+        Balance -= totalAmount;
+        System.Console.WriteLine("Pembayaran via QRIS berhasil");
 
         return true;
     }
 
     public override string GetPaymentName()
     {
-        return "Pembayaran Qris berhasil !"; 
+        return "Qris"; 
     }
     
 }

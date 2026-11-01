@@ -50,20 +50,14 @@ public class Cart
         return false;
     }
 
-    public void RemoveItem(Food food)
+    public void RemoveItem(int index)
     {
-        CartItem? deletedItem = Items.FirstOrDefault(item => item.Item.Id == food.Id);
-
-
-       if(deletedItem is null)
+        if(index<0 || index > Items.Count())
         {
-            System.Console.WriteLine("Maaf, orderan emg blm dipesen.");
+            throw new ArgumentOutOfRangeException("makanan yg kmu masukkan emg blm dipesen.");
         }
 
-        food.AddStock(deletedItem.Quantity);
-
-        Items.Remove(deletedItem);
-        System.Console.WriteLine($"{deletedItem.Item.Name} berhasil dihapus dari pesanan");
+        Items.RemoveAt(index-1);
     }
 
     public List<CartItem> getItems(){
